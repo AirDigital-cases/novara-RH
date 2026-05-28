@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required
 from app.api.utils import get_request_data, json_error, parse_decimal
 from app.extensions import db
 from app.models import JOB_STATUSES, Company, Job
+from app.models.job import build_job_slug, slugify_job_value
 
 
 jobs_bp = Blueprint("jobs", __name__, url_prefix="/jobs")
@@ -58,6 +59,7 @@ def list_jobs():
 
     status = request.args.get("status")
     company_id = request.args.get("company_id", type=int)
+    slug = (request.args.get("slug") or "").strip()
 
     if status:
         query = query.filter_by(status=status)
@@ -65,6 +67,15 @@ def list_jobs():
         query = query.filter_by(company_id=company_id)
 
     jobs = query.all()
+    if slug:
+        normalized_slug = slugify_job_value(slug)
+        jobs = [
+            job
+            for job in jobs
+            if build_job_slug(job.title, job.id) == normalized_slug
+            or build_job_slug(job.title) == normalized_slug
+        ]
+
     return jsonify({"items": [job.to_dict() for job in jobs]})
 
 

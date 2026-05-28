@@ -24,6 +24,7 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/vaga-publica" element={<PublicApplyPage />} />
+      <Route path="/vaga-publica/:identifier" element={<PublicApplyPage />} />
       <Route element={<ShellLayout />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />

@@ -32,6 +32,7 @@ def calculate_candidate_score(candidate: Candidate) -> int:
     experience_questions = {"Você tem experiência na função?"}
     competency_questions = {
         "Tem conhecimento em Excel?",
+        "Você tem conhecimento em Excel?",
         "Competência técnica compatível com a vaga?",
     }
 

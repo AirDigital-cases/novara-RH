@@ -9,6 +9,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Config:
     BASE_DIR = BASE_DIR
+    CORS_ALLOWED_ORIGINS = [
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ALLOWED_ORIGINS",
+            "http://localhost:5173,http://127.0.0.1:5173,https://airdigital-cases.github.io",
+        ).split(",")
+        if origin.strip()
+    ]
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
         f"sqlite:///{(BASE_DIR / 'instance' / 'novare.db').as_posix()}",

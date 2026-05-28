@@ -9,16 +9,22 @@ export default function PipelineBoard({ columns }) {
           </div>
 
           <div className="space-y-3">
-            {column.items.map((item) => (
-              <article key={item.name} className="rounded-[18px] border border-sand bg-sand/65 p-3">
-                <div className="text-sm font-semibold">{item.name}</div>
-                <div className="mt-1 text-xs text-ink/60">{item.job}</div>
-                <div className="mt-3 flex items-center justify-between text-xs">
-                  <span>Score {item.score}</span>
-                  <span>{item.city}</span>
-                </div>
-              </article>
-            ))}
+            {column.items.length ? (
+              column.items.map((item) => (
+                <article key={item.id || item.name} className="rounded-[18px] border border-sand bg-sand/65 p-3">
+                  <div className="text-sm font-semibold">{item.name}</div>
+                  <div className="mt-1 text-xs text-ink/60">{item.job || "Vaga nao informada"}</div>
+                  <div className="mt-3 flex items-center justify-between text-xs">
+                    <span>Score {item.score ?? 0}</span>
+                    <span>{item.city || "Sem cidade"}</span>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p className="rounded-[18px] bg-sand/45 px-3 py-4 text-xs text-ink/45">
+                Nenhum candidato nesta etapa.
+              </p>
+            )}
           </div>
         </div>
       ))}

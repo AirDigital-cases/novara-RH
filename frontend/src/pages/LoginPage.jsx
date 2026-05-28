@@ -1,4 +1,37 @@
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { login } from "../services/api";
+
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const redirectTo = location.state?.from || "/dashboard";
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setErrorMessage("");
+    setIsSubmitting(true);
+
+    try {
+      await login(form);
+      navigate(redirectTo, { replace: true });
+    } catch (error) {
+      setErrorMessage(error.message || "Nao foi possivel entrar agora.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-grain px-4 py-6 text-ink">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -30,10 +63,14 @@ export default function LoginPage() {
         <section className="mesh-card rounded-[36px] border border-white/80 p-8 shadow-soft lg:p-12">
           <p className="text-xs uppercase tracking-[0.3em] text-clay/80">Acesso RH</p>
           <h2 className="mt-4 text-3xl font-semibold">Entrar na operacao</h2>
-          <form className="mt-8 space-y-4">
+          <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
             <label className="block">
               <span className="mb-2 block text-sm font-medium">Email corporativo</span>
               <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
                 className="w-full rounded-2xl border border-white/80 bg-white px-4 py-3 outline-none transition focus:border-moss"
                 placeholder="voce@empresa.com"
               />
@@ -41,17 +78,27 @@ export default function LoginPage() {
             <label className="block">
               <span className="mb-2 block text-sm font-medium">Senha</span>
               <input
+                name="password"
                 type="password"
+                value={form.password}
+                onChange={handleChange}
                 className="w-full rounded-2xl border border-white/80 bg-white px-4 py-3 outline-none transition focus:border-moss"
                 placeholder="••••••••"
               />
             </label>
 
+            {errorMessage ? (
+              <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {errorMessage}
+              </div>
+            ) : null}
+
             <button
-              type="button"
+              type="submit"
+              disabled={isSubmitting}
               className="w-full rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-white transition hover:bg-moss"
             >
-              Acessar painel
+              {isSubmitting ? "Entrando..." : "Acessar painel"}
             </button>
           </form>
 

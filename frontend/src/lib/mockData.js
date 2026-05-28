@@ -46,6 +46,19 @@ export const candidateHighlights = [
   { name: "Aline Rocha", job: "Assistente Administrativo", score: 79, city: "Barueri", stage: "inscricao_recebida" },
 ];
 
+export const candidateStageMeta = [
+  { stage: "inscricao_recebida", label: "Inscricao" },
+  { stage: "qualificacao", label: "Qualificacao" },
+  { stage: "competencia_tecnica", label: "Tecnico" },
+  { stage: "audio_apresentacao", label: "Audio" },
+  { stage: "nova_avaliacao", label: "Nova avaliacao" },
+  { stage: "teste_excel", label: "Teste Excel" },
+  { stage: "teste_comportamental", label: "Teste comportamental" },
+  { stage: "entrevista", label: "Entrevista" },
+  { stage: "aprovado", label: "Aprovado" },
+  { stage: "reprovado", label: "Reprovado" },
+];
+
 export const pipelineColumns = [
   {
     stage: "inscricao_recebida",

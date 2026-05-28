@@ -1,9 +1,23 @@
 from __future__ import annotations
 
 from decimal import Decimal
+import re
+import unicodedata
 
 from app.extensions import db
 from app.models.base import TimestampMixin
+
+
+def slugify_job_value(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value or "")
+    ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_value).strip("-").lower()
+    return slug or "vaga"
+
+
+def build_job_slug(title: str, job_id: int | None = None) -> str:
+    base_slug = slugify_job_value(title)
+    return f"{base_slug}-{job_id}" if job_id is not None else base_slug
 
 
 class Job(TimestampMixin, db.Model):
@@ -31,6 +45,7 @@ class Job(TimestampMixin, db.Model):
             "id": self.id,
             "company_id": self.company_id,
             "title": self.title,
+            "slug": build_job_slug(self.title, self.id),
             "description": self.description,
             "department": self.department,
             "location": self.location,
