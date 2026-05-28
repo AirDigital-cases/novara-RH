@@ -2,11 +2,14 @@
   "name": "novare-rh-frontend",
   "private": true,
   "version": "0.1.0",
+  "homepage": "https://airdigital-cases.github.io/novara-RH",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -16,6 +19,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.19",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "vite": "^5.2.11"
